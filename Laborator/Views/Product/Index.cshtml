@@ -1,0 +1,162 @@
+﻿
+@*@model IEnumerable<Jewelry>*@
+@model ListViewModel<Jewelry>
+
+@{
+    ViewData["Title"] = "Украшения";
+    var categories = ViewData["Groups"] as IEnumerable<JewelryGroup>;
+    int currentGroup = (int)ViewData["CurrentGroup"];
+
+    var text = currentGroup != 0
+    ? categories
+    .FirstOrDefault(g => g.JewelryGroupId == currentGroup)?
+    .GroupName : "Все";
+}
+
+
+<div class="row">
+    <div class="col-2">       
+
+        <div class="dropdown mt-2">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                @text
+            </button>   
+                        
+            <ul class="dropdown-menu"  aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item"
+                   asp-action="Index"
+					   asp-controller="Product">Все</a>
+				</li>
+
+                @foreach (var item in categories)
+                {
+                    <li><a class="dropdown-item"
+                   asp-action="Index"
+                   asp-controller="Product"
+                   asp-route-group="@item.JewelryGroupId"
+                   asp-route-pageNo="1">@item.GroupName</a>
+                   </li>
+                }
+            </ul>
+        </div>
+    </div>
+   
+        
+    <div class="col-10">
+        <div class="card-group">
+            @foreach (var item in Model)
+            {
+                <partial name="_ListItemPartial" model="@item" />
+            }
+        </div>
+
+        <pager page-current="@Model.CurrentPage"
+               page-total="@Model.TotalPages"
+               action="Index"
+               controller="Product"
+               group-id="@currentGroup">
+        </pager>
+        
+    
+               
+    </div>
+</div>
+    
+
+
+
+@*<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.JewelryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Group)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.JewelryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Image)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Group.JewelryGroupId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.JewelryId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.JewelryId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.JewelryId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>*@
+
+
+@*<div class="row">
+    <div class="card-deck">
+        @foreach (var item in Model)
+        {
+            <div class='card m-2 p-1 text-center col-4'>
+                <img src="~/Images/@item.Image"
+                 alt='NoImage'
+                 class="card-img-top" />
+                <div class="card-body">
+                    <h5 class="card-title">
+                        @item.JewelryName
+                    </h5>
+                    <p class="card-text">
+                        @item.Description
+                    </p>
+                    <div class="card-text">
+                        <h6>@item.Price рублей</h6>
+                    </div>
+                    @{
+                        // Получение текущего адреса
+                        var request = ViewContext.HttpContext.Request;
+                        var returnUrl = request.Path +
+                        request.QueryString.ToUriComponent();
+                    }
+                    <!--Разметка кнопки добавления в корзину-->
+                    <p class="mt-2">
+                       <a asp-action="Add"
+                       asp-controller="Cart"
+                       asp-route-id="@item.JewelryId"
+                       asp-route-returnUrl="@returnUrl"
+                       class="btn btn-primary">
+                            <i class="fa fa-shopping-cart"></i> В корзину
+                        </a>
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+</div>*@
+
